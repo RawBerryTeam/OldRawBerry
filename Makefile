@@ -9,7 +9,7 @@ ISO_FILE = rawberry.iso
 
 CC = gcc
 LD = ld
-CFLAGS = -ffreestanding -m64 -g -nostdlib -nostartfiles -nodefaultlibs
+CFLAGS = -ffreestanding -m64 -g -nostdlib -nostartfiles -nodefaultlibs -mno-sse -mno-sse2 -mno-avx
 LDFLAGS = -nostdlib -T $(LINKER_SCRIPT)
 GRUB_MKRESCUE = grub-mkrescue
 
