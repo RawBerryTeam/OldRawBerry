@@ -1,2 +1,5 @@
 /target
 /out
+/iso
+kernel.o
+rawberry.iso
