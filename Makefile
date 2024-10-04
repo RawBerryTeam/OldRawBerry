@@ -13,7 +13,6 @@ CFLAGS = -ffreestanding -m32 -g
 LDFLAGS = -m elf_i386
 GRUB_MKRESCUE = grub-mkrescue
 
-# Cele
 all: $(ISO_FILE)
 
 $(KERNEL_OBJ): $(KERNEL_SRC)
