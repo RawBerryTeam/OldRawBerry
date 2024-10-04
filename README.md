@@ -2,6 +2,10 @@
 
 A simple and lightweight operation system from RawBerry team.
 
+## Official Discord Server Support
+
+https://discord.gg/umgMqTaY44
+
 ## Features
 
 Actually nothing... We are working hard to create useful features for this OS.
