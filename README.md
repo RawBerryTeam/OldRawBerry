@@ -6,6 +6,10 @@ A simple and lightweight operation system from RawBerry team.
 
 Actually nothing... We are working hard to create useful features for this OS.
 
+## Languages
+
+Rust, C, C++, Assembly
+
 ## Authors
 
 We use our [GitHub organization](https://github.com/RawBerryTeam) to host RawBerry repos. Our team consists of:
