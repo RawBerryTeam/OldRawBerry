@@ -3,7 +3,7 @@
 
 void print_string(const char* str);
 void kernel_main(void);
-void panic(const char* message)
+void panic(const char* message);
 
 void print_string(const char* str) {
     uint16_t* vga_buffer = (uint16_t*)VGA_BUFFER;
