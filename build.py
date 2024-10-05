@@ -47,12 +47,12 @@ def curses_menu(stdscr, config):
     stdscr.clear()
     stdscr.refresh()
     
-    menu_items = list(config.keys()) + ["Apply patch"]
+    menu_items = list(config.keys()) + ["Apply patches", "Save and Exit", "Save and Build"]
     current_row = 0
 
     def print_menu():
         stdscr.clear()
-        stdscr.addstr(0, 0, "Use arrows to navigate the menu. ENTER to edit.", curses.A_BOLD)
+        stdscr.addstr(0, 0, "Use arrows to navigate. Press ENTER to edit.", curses.A_BOLD)
         for idx, item in enumerate(menu_items):
             if idx == current_row:
                 stdscr.addstr(idx + 1, 0, f"> {item}: {config.get(item, '')}", curses.A_REVERSE)
@@ -78,9 +78,18 @@ def curses_menu(stdscr, config):
                 config[menu_items[current_row]] = new_value
                 save_config(config)
                 curses.noecho()
-            else:
+            elif menu_items[current_row] == "Apply patches":
                 apply_patch_menu(stdscr)
+            elif menu_items[current_row] == "Save and Exit":
+                save_config(config)
+                break
+            elif menu_items[current_row] == "Save and Build":
+                save_config(config)
+                build_project(config)
+                break
         elif key == ord('q'):
+            break
+        elif key == curses.KEY_LEFT: 
             break
 
 def build_project(config):
@@ -106,6 +115,8 @@ def build_project(config):
 
 def apply_patch_menu(stdscr):
     patches = [f for f in os.listdir(PATCH_DIR) if f.endswith('.patch')]
+    selected_patches = [False] * len(patches)
+
     if not patches:
         stdscr.clear()
         stdscr.addstr(0, 0, "No patch files in the patch folder.")
@@ -117,12 +128,14 @@ def apply_patch_menu(stdscr):
 
     while True:
         stdscr.clear()
-        stdscr.addstr(0, 0, "Select a patch to apply and press ENTER.", curses.A_BOLD)
+        stdscr.addstr(0, 0, "Select patches with X, then press Q to return.", curses.A_BOLD)
         for idx, patch in enumerate(patches):
             if idx == current_row:
-                stdscr.addstr(idx + 1, 0, f"> {patch}", curses.A_REVERSE)
+                mark = "[*]" if selected_patches[idx] else "[ ]"
+                stdscr.addstr(idx + 1, 0, f"> {mark} {patch}", curses.A_REVERSE)
             else:
-                stdscr.addstr(idx + 1, 0, f"  {patch}")
+                mark = "[*]" if selected_patches[idx] else "[ ]"
+                stdscr.addstr(idx + 1, 0, f"  {mark} {patch}")
         stdscr.refresh()
 
         key = stdscr.getch()
@@ -131,11 +144,14 @@ def apply_patch_menu(stdscr):
             current_row -= 1
         elif key == curses.KEY_DOWN and current_row < len(patches) - 1:
             current_row += 1
-        elif key == ord('\n'): 
-            patch_file = os.path.join(PATCH_DIR, patches[current_row])
-            apply_patch(patch_file)
-            break
+        elif key == ord('x') or key == ord('X'):
+            selected_patches[current_row] = not selected_patches[current_row]
         elif key == ord('q'):
+            for idx, selected in enumerate(selected_patches):
+                if selected:
+                    apply_patch(os.path.join(PATCH_DIR, patches[idx]))
+            break
+        elif key == curses.KEY_LEFT: 
             break
 
 def apply_patch(patch_file):
