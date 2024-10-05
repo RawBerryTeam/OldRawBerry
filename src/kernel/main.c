@@ -1,7 +1,6 @@
 #include <stdint.h>
 #include "main.h"
 #include "drivers/ports.h"
-#include "drivers/b.h"
 
 void print_string(const char* str);
 void kernel_main(void);
