@@ -2,9 +2,9 @@
 
 A simple and lightweight operation system from RawBerry team.
 
-## Official Discord Server Support
+## Official Discord Server
 
-https://discord.gg/umgMqTaY44
+Join for support and chit chatting - https://discord.gg/umgMqTaY44
 
 ## Features
 
