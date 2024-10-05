@@ -13,10 +13,12 @@ void print_string(const char* str) {
         vga_buffer++;
         str++;
     }
+    *vga_buffer = (uint16_t)('\n' | 0x0F00);
 }
 
 void kernel_main() {
     print_string("Hello RawBerry");
+    while (1) {}
 }
 
 void panic(const char* message) {
