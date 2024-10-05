@@ -47,12 +47,12 @@ def curses_menu(stdscr, config):
     stdscr.clear()
     stdscr.refresh()
     
-    menu_items = list(config.keys()) + ["Zastosuj patch"]
+    menu_items = list(config.keys()) + ["Apply patch"]
     current_row = 0
 
     def print_menu():
         stdscr.clear()
-        stdscr.addstr(0, 0, "Użyj strzałek, aby poruszać się po menu. ENTER, aby edytować.", curses.A_BOLD)
+        stdscr.addstr(0, 0, "Use arrows to navigate the menu. ENTER to edit.", curses.A_BOLD)
         for idx, item in enumerate(menu_items):
             if idx == current_row:
                 stdscr.addstr(idx + 1, 0, f"> {item}: {config.get(item, '')}", curses.A_REVERSE)
@@ -71,8 +71,8 @@ def curses_menu(stdscr, config):
         elif key == ord('\n'):
             if current_row < len(config.keys()):
                 stdscr.clear()
-                stdscr.addstr(0, 0, f"Edytujesz: {menu_items[current_row]}")
-                stdscr.addstr(1, 0, "Nowa wartość: ")
+                stdscr.addstr(0, 0, f"Editing: {menu_items[current_row]}")
+                stdscr.addstr(1, 0, "New value: ")
                 curses.echo()
                 new_value = stdscr.getstr(1, 13).decode('utf-8')
                 config[menu_items[current_row]] = new_value
@@ -84,31 +84,31 @@ def curses_menu(stdscr, config):
             break
 
 def build_project(config):
-    print(Fore.GREEN + Style.BRIGHT + "Rozpoczynam budowanie projektu...")
+    print(Fore.GREEN + Style.BRIGHT + "Starting project build...")
 
     try:
         subprocess.run([config['cc'], *config['cflags'].split(), '-c', config['kernel_src'], '-o', config['kernel_obj']], check=True)
-        print(Fore.YELLOW + f"Skopilowano {config['kernel_src']} do {config['kernel_obj']}")
+        print(Fore.YELLOW + f"Compiled {config['kernel_src']} to {config['kernel_obj']}")
 
         os.makedirs(os.path.join(config['iso_dir'], 'boot'), exist_ok=True)
         subprocess.run([config['ld'], *config['ldflags'].split(), '-o', config['kernel_elf'], config['kernel_obj']], check=True)
-        print(Fore.YELLOW + f"Linkowano {config['kernel_obj']} do {config['kernel_elf']}")
+        print(Fore.YELLOW + f"Linked {config['kernel_obj']} to {config['kernel_elf']}")
 
         os.makedirs(os.path.join(config['iso_dir'], config['grub_cfg_dir']), exist_ok=True)
         subprocess.run(['cp', config['grub_cfg'], os.path.join(config['iso_dir'], config['grub_cfg_dir'])], check=True)
         subprocess.run([config['grub_mkrescue'], '-o', config['iso_file'], config['iso_dir']], check=True)
-        print(Fore.CYAN + f"Utworzono ISO {config['iso_file']}")
+        print(Fore.CYAN + f"Created ISO {config['iso_file']}")
 
-        print(Fore.GREEN + Style.BRIGHT + "Budowanie zakończone sukcesem!")
+        print(Fore.GREEN + Style.BRIGHT + "Build completed successfully!")
     except subprocess.CalledProcessError as e:
-        print(Fore.RED + "Błąd podczas budowania projektu!")
+        print(Fore.RED + "Error during project build!")
         print(Fore.RED + str(e))
 
 def apply_patch_menu(stdscr):
     patches = [f for f in os.listdir(PATCH_DIR) if f.endswith('.patch')]
     if not patches:
         stdscr.clear()
-        stdscr.addstr(0, 0, "Brak plików patch w folderze patch.")
+        stdscr.addstr(0, 0, "No patch files in the patch folder.")
         stdscr.refresh()
         stdscr.getch()
         return
@@ -117,7 +117,7 @@ def apply_patch_menu(stdscr):
 
     while True:
         stdscr.clear()
-        stdscr.addstr(0, 0, "Wybierz patch do zastosowania i wciśnij ENTER.", curses.A_BOLD)
+        stdscr.addstr(0, 0, "Select a patch to apply and press ENTER.", curses.A_BOLD)
         for idx, patch in enumerate(patches):
             if idx == current_row:
                 stdscr.addstr(idx + 1, 0, f"> {patch}", curses.A_REVERSE)
@@ -139,17 +139,17 @@ def apply_patch_menu(stdscr):
             break
 
 def apply_patch(patch_file):
-    print(Fore.CYAN + f"Zastosowanie patcha: {patch_file}")
+    print(Fore.CYAN + f"Applying patch: {patch_file}")
     try:
         subprocess.run(['patch', '-p1', '<', patch_file], check=True, shell=True)
-        print(Fore.GREEN + "Patch zastosowany pomyślnie!")
+        print(Fore.GREEN + "Patch applied successfully!")
     except subprocess.CalledProcessError as e:
-        print(Fore.RED + "Błąd podczas stosowania patcha!")
+        print(Fore.RED + "Error applying patch!")
         print(Fore.RED + str(e))
 
-parser = argparse.ArgumentParser(description="Build system z obsługą curses i kolorów.")
-parser.add_argument('-c', '--config', action='store_true', help="Edycja konfiguracji")
-parser.add_argument('-b', '--build', action='store_true', help="Budowanie projektu")
+parser = argparse.ArgumentParser(description="Build system with curses and color support.")
+parser.add_argument('-c', '--config', action='store_true', help="Edit configuration")
+parser.add_argument('-b', '--build', action='store_true', help="Build the project")
 args = parser.parse_args()
 
 config = load_config()

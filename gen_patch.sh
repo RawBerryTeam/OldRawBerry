@@ -1,17 +1,18 @@
 #!/bin/bash
+
 PATCH_DIR="patch"
 
 if [ ! -d "$PATCH_DIR" ]; then
     mkdir -p "$PATCH_DIR"
-    echo "Utworzono katalog $PATCH_DIR"
+    echo "Created directory $PATCH_DIR"
 fi
 
 usage() {
-    echo "Użycie: $0 -o <oryginalny_plik> -m <zmodyfikowany_plik> -n <nazwa_patcha>"
+    echo "Usage: $0 -o <original_file> -m <modified_file> -n <patch_name>"
     echo ""
-    echo "-o    Oryginalny plik wraz ze ścieżką (np. src/kernel/driver/ps.c)."
-    echo "-m    Zmodyfikowany plik wraz ze ścieżką (np. src/kernel/driver/ps_mod.c)."
-    echo "-n    Nazwa pliku .patch, który zostanie zapisany w folderze $PATCH_DIR."
+    echo "-o    Original file with path (e.g., src/kernel/driver/ps.c)."
+    echo "-m    Modified file with path (e.g., src/kernel/driver/ps_mod.c)."
+    echo "-n    Name of the .patch file that will be saved in the $PATCH_DIR folder."
     echo ""
     exit 1
 }
@@ -28,28 +29,22 @@ while getopts ":o:m:n:" opt; do
             PATCH_NAME="$OPTARG"
             ;;
         \?)
-            echo "Nieznana opcja: -$OPTARG" >&2
+            echo "Unknown option: -$OPTARG" >&2
             usage
             ;;
         :)
-            echo "Opcja -$OPTARG wymaga argumentu." >&2
+            echo "Option -$OPTARG requires an argument." >&2
             usage
             ;;
     esac
 done
 
 if [ -z "$ORIGINAL_FILE" ] || [ -z "$MODIFIED_FILE" ] || [ -z "$PATCH_NAME" ]; then
-    echo "Błąd: Wszystkie argumenty -o, -m i -n są wymagane."
+    echo "Error: All options -o, -m, and -n are required."
     usage
 fi
 
 PATCH_PATH="$PATCH_DIR/$PATCH_NAME.patch"
 
-echo "Generowanie patcha z $ORIGINAL_FILE i $MODIFIED_FILE..."
+echo "Generating patch from $ORIGINAL_FILE and $MODIFIED_FILE..."
 diff -u "$ORIGINAL_FILE" "$MODIFIED_FILE" > "$PATCH_PATH"
-
-if [ $? -eq 0 ]; then
-    echo "Patch zapisany jako $PATCH_PATH"
-else
-    echo "Błąd podczas generowania patcha!"
-fi
