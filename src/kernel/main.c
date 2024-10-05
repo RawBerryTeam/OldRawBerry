@@ -16,6 +16,7 @@ void print_string(const char* str) {
 
 void kernel_main() {
     print_string("Hello RawBerry");
+    print_string("This is version 0.1.1 of this kernel!")
 }
 
 void panic(const char* message) {
