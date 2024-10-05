@@ -1,18 +1,10 @@
 #include <stdint.h>
 #include "main.h"
+#include "drivers/ports.h"
 
 void print_string(const char* str);
 void kernel_main(void);
 void panic(const char* message);
-
-void init_vga_buffer() {
-    uint16_t* vga_control = (uint16_t*)0x3D4;
-    *vga_control = 0x03;
-    uint16_t* vga_buffer = (uint16_t*)0xB8000;
-    for (int i = 0; i < 80 * 25; i++) {
-        vga_buffer[i] = 0x0200;
-    }
-}
 
 void print_string(const char* str) {
     uint16_t* vga_buffer = (uint16_t*)0xB8000;
@@ -31,7 +23,6 @@ void print_string(const char* str) {
 }
 
 void kernel_main() {
-    init_vga_buffer();
     print_string("Hello RawBerry");
     while (1) {}
 }
