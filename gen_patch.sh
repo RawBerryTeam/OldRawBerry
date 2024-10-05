@@ -1,5 +1,11 @@
 #!/bin/bash
+
 PATCH_DIR="patch"
+
+if [ ! -d "$PATCH_DIR" ]; then
+    mkdir -p "$PATCH_DIR"
+    echo "Utworzono katalog $PATCH_DIR"
+fi
 
 usage() {
     echo "Użycie: $0 -o <oryginalny_plik> -m <zmodyfikowany_plik> -n <nazwa_patcha>"
