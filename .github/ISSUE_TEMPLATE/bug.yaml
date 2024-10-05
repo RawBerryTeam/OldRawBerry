@@ -33,7 +33,7 @@ body:
         - VMware Workstation Player
         - VMware Workstation Pro
         - Phisically installed OS
-      validations:
+    validations:
         required: true
   - type: textarea
     id: out
