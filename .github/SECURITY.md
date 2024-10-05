@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-Every version is supported by the community. We also provide support for not very old RawBerry versions.
+Every version is supported by the community. We also provide support for 5 latest RawBerry versions.
 
 ## Reporting a Security Vulnerability
 
