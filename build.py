@@ -7,7 +7,7 @@ from colorama import init, Fore, Style
 
 init(autoreset=True)
 
-CONFIG_FILE = 'config.conf'
+CONFIG_FILE = 'build.conf'
 PATCH_DIR = 'patch'
 
 DEFAULT_CONFIG = {
