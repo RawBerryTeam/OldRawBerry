@@ -1,4 +1,4 @@
-> [!DANGER]
+> [!WARNING]
 > This is outdated OS. Please stop using it, making any contributions or do something with this code.
 
 # RawBerry
