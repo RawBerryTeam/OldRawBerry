@@ -3,9 +3,6 @@
 #include "drivers/display.h"
 #include "util.h"
 
-void kernel_main(void);
-void panic(const char* message);
-
 void kernel_main() {
     clear_screen();
     char* line;

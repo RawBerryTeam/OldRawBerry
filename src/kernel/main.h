@@ -4,6 +4,9 @@
 
 #define VGA_BUFFER 0xB8000
 
+void kernel_main(void);
+void panic(const char* message);
+
 typedef struct {
     uint32_t magic;
     uint32_t flags;
